@@ -1,0 +1,15 @@
+{
+  "name": "dev-proxy",
+  "version": "1.0.0",
+  "description": "A proxy server for development purposes",
+  "main": "index.mjs",
+  "scripts": {
+    "start": "node index.mjs"
+  },
+  "author": "david.escorza@progmbh.com",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "express": "^4.19.2"
+  }
+}
