@@ -27,12 +27,25 @@ npm install
 ```
 
 ## Set up the ngrok tunnel
-Edit the start_tunnel.sh script and assign your ngrok edgo to the NGROK_EDGE variable:
+Edit the start_tunnel.sh and start-all.sh scripts and assign your ngrok edge
+to the NGROK_EDGE variable:
 
 ```bash
 NGROK_EDGE="edghts_2hgx1TzXxwRBfIn020w1NZzOUxV"
 ```
 ## Usage
+Everything can be started by running:
+```bash
+./start-all.sh
+```
+
+This starts the ngrok tunnel on port 3000, afer five seconds it also starts the
+proxy application which listen all requests on port 3000.
+
+Type Ctrl-C for stopping the proxy application and stopping the ngrok tunnel.
+
+## Usage (old way)
+
 - Start the ngrok tunnel and assign port 3000 to it:
 ```bash
 ./start_tunnel.sh 3000
@@ -50,19 +63,3 @@ For stopping the proxy just type Ctrl-C. Then stop the Ngrok tunnel:
 ```bash
 ./stop-ngrok.sh
 ```
-
-## Endpoints
-
-### GET `/openid/login`
-- Forwards GET requests to the target API endpoint (`http://api.dg1.test/opeid/login`).
-- Logs request details (path, headers, query, body).
-- Forwards the request to the target API and sends back the response.
-
-### POST `/openid/authorize`
-- Forwards POST requests to the target API endpoint (`http://api.dg1.test/openid/authorize`).
-- Logs request details (path, headers, query, body).
-- Sets appropriate headers and forwards the request body to the target API.
-- Sends back the response from the target API.
-
-## Limitations
-The application only handles the endpoints listed above.
