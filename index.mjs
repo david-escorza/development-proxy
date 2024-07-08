@@ -10,11 +10,7 @@ const port = 3000
 const apiUrl = 'http://api.dg1.test'
 
 app.get('/openid/login', async (req, res) => {
-    console.log('');
-    console.log('PATH:', req.path);
-    console.log('HEADERS:', req.headers);
-    console.log('QUERY:', req.query);
-    console.log('BODY:', req.body);
+    logRequest(req);
 
     const targetFullUrl = new URL(req.originalUrl, apiUrl);
     try {
@@ -35,11 +31,7 @@ app.get('/openid/login', async (req, res) => {
 });
 
 app.post('/openid/authorize', async (req, res) => {
-    console.log('');
-    console.log('PATH:', req.path);
-    console.log('HEADERS:', req.headers);
-    console.log('QUERY:', req.query);
-    console.log('BODY:', req.body);
+    logRequest(req);
 
     const targetFullUrl = new URL(req.originalUrl, apiUrl);
     try {
@@ -48,24 +40,40 @@ app.post('/openid/authorize', async (req, res) => {
             headers: {
                 ...req.headers,
                 host: new URL(apiUrl).host,
-                'Content-Length': Buffer.byteLength(req.body),
-
+                'Content-Length': Buffer.byteLength(req.body)
             },
-            body: req.body // Directly use req.body
+            body: req.body, // Directly use req.body
+            redirect: 'manual'
         });
-        const responseBody = await response.text();
-        res.status(response.status);
-        res.set({
-            ...response.headers,
-            'content-length': responseBody.length
-        });
-        res.send(responseBody);
+        console.log('RESPONSE STATUS:', response.status);
+
+        if ([301, 302, 303, 307, 308].includes(response.status)) {
+            const location = response.headers.get('Location');
+            console.log('Redirect to:', location);
+            res.redirect(response.status, location);
+        } else {
+            const responseBody = await response.text();
+            res.status(response.status);
+            res.set({
+                ...response.headers,
+                'content-length': responseBody.length
+            });
+            res.send(responseBody);
+        }
     } catch (error) {
         console.error('Error forwarding request:', error);
         res.status(500).send('Internal Server Error');
     }
 });
-
 app.listen(port, () => {
-    console.log(`ProxyLog listening on port ${port}`)
-})
+    console.log(`Proxy listening on port ${port}`)
+});
+
+const logRequest = (req) => {
+    console.log('');
+    console.log('METHOD:', req.method);
+    console.log('PATH:', req.path);
+    console.log('HEADERS:', req.headers);
+    console.log('QUERY:', req.query);
+    console.log('BODY:', req.body);
+}

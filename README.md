@@ -65,4 +65,4 @@ For stopping the proxy just type Ctrl-C. Then stop the Ngrok tunnel:
 - Sends back the response from the target API.
 
 ## Limitations
-At the moment this proxy application can not handle HTTP redirects.
+The application only handles the endpoints listed above.
