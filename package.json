@@ -1,15 +1,26 @@
 {
   "name": "dev-proxy",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "A proxy server for development purposes",
   "main": "index.mjs",
+  "files": [
+    "index.mjs",
+    "src",
+    "bin"
+  ],
+  "bin": {
+    "dev-proxy": "./bin/dev-proxy-cli.js"
+  },
   "scripts": {
-    "start": "node index.mjs"
+    "proxy": "node --require=suppress-experimental-warnings --env-file=.env index.mjs",
+    "dev": "node --require=suppress-experimental-warnings --env-file=.env index-new.mjs"
   },
   "author": "david.escorza@progmbh.com",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",
-    "express": "^4.19.2"
+    "express": "^4.19.2",
+    "localtunnel": "^2.0.2",
+    "suppress-experimental-warnings": "^2.0.0"
   }
 }
